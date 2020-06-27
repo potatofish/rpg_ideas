@@ -1,0 +1,45 @@
+{
+    "$schema": "",
+    "$id": "",
+    "title": "",
+    "description": "A drive of a player character",
+    "type": "object",
+    "properties": {
+        "id": {
+          "description": "The unique identifier for a drive",
+          "type": "integer"
+        },
+        "name": {
+            "description": "The user facing identifier for a drive",
+            "type": "string"
+        },
+        "intentions": {
+            "description": "A statment of intent for characters of this drive",
+            "type": "string"
+        },
+        "references": {
+            "description": "List of external Sources used as inspiration, and the context",
+            "type": "array",
+            "items": [
+                {
+                    "type": "object",
+                    "properties": {
+                        "inspiration": {
+                            "description": "Description of inspiration",
+                            "$ref": "schemas/description.schema.json"
+                        },
+                        "reference": {
+                            "description": "Reference to inspiration",
+                            "$ref": "schemas/reference.schema.json"
+                        }
+                    },
+                    "required": ["inspiration", "reference"]
+                }
+            ]
+        },
+        "variants": {
+
+        }
+    },
+    "required": [ "id", "name", "intentions" ]
+}

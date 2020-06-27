@@ -1,0 +1,39 @@
+{ 
+    "Description": {"Short": "The forces that drive."}, 
+    [ 
+        { "Blood" : {
+            "intentions" : "I take what I want and drive conflict",
+            "Archetypes" : [{"title": "The Anatgonist.", "reference": {"source" : "GGv3", "page": 71}}],
+            "Variants" : { // indexed by role
+                "Force" : {"Name": "Brute", "intentions": "bring blood and pain to my enemies"},
+                "Flexibility" : {"Name" : "Leech", "intentions": "take the lifeblood of my enemies"},
+                "Protection" : {"Name": "Stoic", "intentions": "to give my blood in place of others"},
+                "Mastery" :  {"Name": "Sourcer", "intentions" : "to master the blood to use it against my enemies"},
+                "Recovery" : {"Name": "Surgeon", "intentions": "to steam the flow of blood"},
+                "Allure" : {"Name": "Provoker", "intentions": "to boil the blood over"}
+            }
+        }},
+        {"Knowledge": {
+            "intentions" : "I "
+            ""
+            "Fighter" : {"Role" : "Force", "Description": {"Short": "The fighter dedicates his life to impoving himself and his skills"}},
+            "Hunter" : { "Role": "Flexibility"},
+            "Physician" : {"Role": "Recovery"},
+            "Wizard" : {"Role": "Mastery"}
+        }},
+        {"Leadership": {
+            "Champion" : {"Role": "Force"},
+            "Guide" : {"Role" : "Flexibility"},
+            "Hero" : {"Role": "Protection"},
+            "Philanthrope" : {"Role" : "Recovery"},
+
+        }},
+        {"Betterment": {
+
+        }},
+        {"Spirit" : {
+            "Recovery" : {"Name": "Cleric", "intentions": ""},
+        }},
+        {"Adventure" : {},}
+],
+}

@@ -1,0 +1,48 @@
+{
+    "Prototypes" : {
+        "Character": {
+            "Abilities": ["Mind", "Body", "Soul"], 
+            "Lineage": ["Species", "Caste", "Blood"],
+            "Purpose" : ["Role", "Drive", "Profession"],
+            
+            "Options" : {
+                "Drives": {},
+                "Profession": {},
+                "Role": {
+                    "Force" : { "Attribute": "Strength", "Short Description": "The Fighter"}, 
+                    "Flexibility" : { "Attribute": "Dexterity", "Short Description": "The Rogue"}, 
+                    "Protection" : { "Attribute": "Constitution", "Short Description": "The Tank"}, 
+                    "Mastery" : { "Attribute": "Intelligence", "Short Description": "The Spell-Caster"}, 
+                    "Recovery" : { "Attribute": "Wisdom", "Short Description": "The Healer"}, 
+                    "Allure": { "Attribute": "Charisma", "Short Description": "The Face"}
+                },
+            },;
+        },
+        "Drive"  : [
+            "name", 
+            "Archetype", // Classes look to conform to player archetypes
+            "description", 
+            "variants" 
+        ],
+        "Role": ["focus", "Attribute", "description"],
+
+
+        "Reference": ["Source", "page"],
+        "Source" : [ "key", "title", "Edition", "isbn" ],
+        "Edition": ["printing", "year"],
+
+        // third party concepts referenced
+        "Attribute": ["name", "Reference"],
+        "Archetype": ["name", "Reference"],
+
+    },
+
+    "Reference" : {
+        "Sources" : {
+            "key" : "GGv3",
+            "title" : "Gamemastery Guide",
+            "edition" : {"printing": 3, "year": 2013},
+            "isbn" : 9781601259493,
+        }
+    }
+}
