@@ -30,21 +30,29 @@ function objectFromSchema({properties}, values) {
         console.log(properties[element]);
         console.log("value type:", typeof values[index]);
 
+        // change to embedded function with return value that sets object[element]
+
+
         switch (properties[element].type) {
-            case ("integer" && Number.isInteger(values[index])):
-                object[element] = new Number(values[index]);
+            case ("integer"):
+                object[element] = parseInt(values[index]);
                 break;
             case "number":
-                object[element] = new Number(values[index]);
-            case "object":
-                object[element] = values[index];
+                object[element] = parseFloat(values[index]);
+                break;
             case "string":
                 object[element] = `${"values[index]"}`;
+                break;
+            case "object":
+                object[element] = values[index];
+                break;
             default:
-                throw "Invalid JSON Schema Type";
+                throw `Invalid JSON Schema Type ${properties[element].type}`;
         }
         
     });
+    //console.log("OBJ:", object);
+    
     
     return object;
     
@@ -58,7 +66,7 @@ async function writeFromSchema(path, schema, values)
 
     const writeFile = util.promisify(fs.writeFile);
     const catalogEntry = objectFromSchema(schema, values);
-    //await writeFile(path, catalogEntry, 'utf8');
+    await writeFile(path, JSON.stringify(catalogEntry), 'utf8');
 
 
     return await loadJSONConfigFile(PATHS.CATALOGS.ROOT, () => { console.log("CATALOG ROOT FILE [%s] MISSING!", PATHS.CATALOGS.ROOT) });
@@ -126,10 +134,10 @@ function add(catalog, object) {
 
 //these can go async later to process both file reads at once
 (async () => {
-    console.log("async begin");
+    //console.log("async begin");
 
     const catalogSchema = await loadJSONConfigFile(PATHS.SCHEMAS.CATALOG, () => { console.log("CATALOG SCHEMA FILE [%s] MISSING!", PATHS.SCHEMAS.CATALOG) });
-    console.log(catalogSchema);
+    console.log("Schema:", catalogSchema);
 
     const rootCatalog = await loadJSONConfigFile(PATHS.CATALOGS.ROOT, () => {
         console.log(PATHS.CATALOGS.ROOT);
@@ -137,7 +145,7 @@ function add(catalog, object) {
         return writeFromSchema(PATHS.CATALOGS.ROOT, catalogSchema, [0, rootCatalogFileDescription]);
          
     });
-    console.log(rootCatalog);
+    console.log("RootCatalog:", rootCatalog);
     process.exit();
 })();
 
