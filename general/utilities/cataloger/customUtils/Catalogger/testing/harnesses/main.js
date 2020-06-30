@@ -1,5 +1,10 @@
-const Catalogger = require('../../Catalogger.js');
+const Catalogger = require('Catalogger');
+
 (async () => {
-    console.log(await Catalogger.init());
+    console.log(require.main.path);
+    
+    const testCatalogger = await Catalogger.init();
+    console.log(testCatalogger);
+    
 })();
 

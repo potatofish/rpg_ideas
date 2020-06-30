@@ -1,7 +1,32 @@
+const DEFAULTS = {maxHistorySize: 10, history: []};
+
 const FileHistory = class {
-    constructor(maxHistorySize) {
-        this.maxHistorySize = maxHistorySize;
-        this.history = [];
+    constructor(options) {
+        //validate
+        if(options === undefined) {
+            Object.assign(this, DEFAULTS);
+            return;
+        }
+        
+        this.maxHistorySize = (()=>{
+            if (options.maxHistorySize && parseInt(options.maxHistorySize))
+                return options.maxHistorySize;
+            if (parseInt(options))
+                return options;
+            throw `maxHistorySize must be an integer.` +
+                `${maxHistorySize} is not one.`;
+        })(); 
+
+        this.history = (()=>{
+            if (options.history) {
+                if(Array.isArray(options.history))
+                    return options.history;
+                else 
+                    throw `history must be an Array.` +
+                        `${options.history} is not one.`;
+            } 
+            return DEFAULTS.history;
+        })(); 
     }
 
     getHistory(index) {

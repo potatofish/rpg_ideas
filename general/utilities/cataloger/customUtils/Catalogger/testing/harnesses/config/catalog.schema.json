@@ -1,0 +1,17 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "~/development/rpg_ideas/general/utilities/catalog.schema.json",
+    "title": "Catalog",
+    "description": "A catalog of objects that are indexed. Objects should never be deleted from a live catalog. Only depricated & overwrote. NEVER reused",
+    "type": "object",
+    "properties": {
+        "id": {
+            "description": "Unique integer representative of the object's location in the catalog",
+            "type": "integer"
+        },
+        "item": {
+            "description": "Item in the catlog. This can be any object.",
+            "type": "object"     
+        }
+    }
+}

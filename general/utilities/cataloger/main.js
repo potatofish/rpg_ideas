@@ -2,12 +2,14 @@
 "use strict";
 
 
-const fs = require("fs");
+const = require("fs");
 var Ajv = require('ajv');
 const util = require('util');
 const prompt = require('prompt');
 const FileHistory = require('./customUtils/FileHistory.js');
 const { loadJSONFile } = require("./customUtils/loadJSONFile");
+const { writeFromSchema } = require("./customUtils/Schema/writeFromSchema");
+const { writeFromObject } = require("./customUtils/writeFromObject");
 
 
 
@@ -17,6 +19,7 @@ const PATHS = {
     CATALOGS: { ROOT: "./catalogs.catalog.json" },
     SETTINGS: {FILE_HISTORY: "./data/fileHistory.json"}
 };
+exports.PATHS = PATHS;
 
 const rootCatalogFileDescription = {
     title: "Root Catalog",
@@ -27,65 +30,6 @@ const rootCatalogFileDescription = {
 
 let historicalCatalogs = {maxHistory: 10, history: []};
 
-function objectFromSchema({ properties }, values) {
-    // load values into parameters as provided
-    // more are ignored, fewer go to undefined
-    console.log(properties);
-
-    let object = {};
-    console.log("KEYS:", Object.keys(properties));
-
-    Object.keys(properties).forEach((element, index) => {
-        console.log(properties[element]);
-        console.log("value type:", typeof values[index]);
-
-        // change to embedded function with return value that sets object[element]
-
-
-        switch (properties[element].type) {
-            case ("integer"):
-                object[element] = parseInt(values[index]);
-                break;
-            case "number":
-                object[element] = parseFloat(values[index]);
-                break;
-            case "string":
-                object[element] = `${"values[index]"}`;
-                break;
-            case "object":
-                object[element] = values[index];
-                break;
-            default:
-                throw `Invalid JSON Schema Type ${properties[element].type}`;
-        }
-
-    });
-    //console.log("OBJ:", object);
-
-
-    return object;
-
-}
-async function writeFromObject(path, object) {
-    const writeFile = util.promisify(fs.writeFile);
-    let promised = await writeFile(path, JSON.stringify(object), 'utf8');
-    console.log({promised});
-    
-    return promised;
-}
-
-async function writeFromSchema(path, schema, values) {
-
-    //console.log("PTAHT!", [path, schema, values]);
-
-    const writeFile = util.promisify(fs.writeFile);
-    const catalogEntry = objectFromSchema(schema, values);
-    await writeFile(path, JSON.stringify(catalogEntry), 'utf8');
-
-
-    return await loadJSONConfigFile(PATHS.CATALOGS.ROOT, () => { console.log("CATALOG ROOT FILE [%s] MISSING!", PATHS.CATALOGS.ROOT) });
-
-}
 /*
 fs.open(path, 'r', (err, fd) => {
     if (err) {
@@ -156,7 +100,7 @@ async function promptInput(message, label, parser) {
     const rootCatalog = await loadJSONConfigFile(PATHS.CATALOGS.ROOT, () => {
         console.log(PATHS.CATALOGS.ROOT);
 
-        return writeFromScshema(PATHS.CATALOGS.ROOT, catalogSchema, [0, rootCatalogFileDescription]);
+        return writeFromSchema(PATHS.CATALOGS.ROOT, catalogSchema, [0, rootCatalogFileDescription]);
 
     });
     console.log("RootCatalog:", rootCatalog);

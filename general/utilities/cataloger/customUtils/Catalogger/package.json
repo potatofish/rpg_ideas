@@ -1,15 +1,12 @@
 {
-  "name": "CataloggerTestHarness",
+  "name": "Catalogger",
   "version": "1.0.0",
-  "description": "",
-  "main": "main.js",
+  "main": "Catalogger.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "Catalogger": "file:../.."
-  }
+  "description": ""
 }
