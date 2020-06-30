@@ -14,7 +14,7 @@ const FileHistory = require('./customUtils/FileHistory.js');
 const PATHS = { 
     SCHEMAS: { CATALOG: "./catalog.schema.json" }, 
     CATALOGS: { ROOT: "./catalogs.catalog.json" },
-    CONFIG: {FILE_HISTORY: "./data/fileHistory.json"}
+    SETTINGS: {FILE_HISTORY: "./data/fileHistory.json"}
 };
 
 const rootCatalogFileDescription = {
@@ -67,7 +67,10 @@ function objectFromSchema({ properties }, values) {
 }
 async function writeFromObject(path, object) {
     const writeFile = util.promisify(fs.writeFile);
-    return await writeFile(path, JSON.stringify(object), 'utf8');
+    let promised = await writeFile(path, JSON.stringify(object), 'utf8');
+    console.log({promised});
+    
+    return promised;
 }
 
 async function writeFromSchema(path, schema, values) {
@@ -179,61 +182,83 @@ async function promptInput(message, label, parser) {
     const rootCatalog = await loadJSONConfigFile(PATHS.CATALOGS.ROOT, () => {
         console.log(PATHS.CATALOGS.ROOT);
 
-        return writeFromSchema(PATHS.CATALOGS.ROOT, catalogSchema, [0, rootCatalogFileDescription]);
+        return writeFromScshema(PATHS.CATALOGS.ROOT, catalogSchema, [0, rootCatalogFileDescription]);
 
     });
     console.log("RootCatalog:", rootCatalog);
 
-    // load the catalogger file history catalog, creating it if it doesn't exit
-    let fh = new FileHistory(10);
-    const fhCatalog = await loadJSONConfigFile(PATHS.CONFIG.FILE_HISTORY, () => {
+    // load the catalogger file history from settings file, creating it if it doesn't exit
+    const fhConfig = await loadJSONConfigFile(PATHS.SETTINGS.FILE_HISTORY, () => {
         console.log("No file history found");
         return undefined;
+    })
+    .catch((reason) => {
+        console.log("Corrupted FileHistory: \n", reason);
+        console.log("Rebuilding from default");
     });
-
+    
     // 
-    console.log(fhCatalog);
-    if (fhCatalog) 
-        fhCatalog.history.forEach((ele) => fh.updateHistory(ele));
+    console.log(fhConfig);
+    const fileHistory = await (async () => {
+        if (fhConfig !== undefined) {
+            let fh = new FileHistory(fhConfig.maxHistorySize);
+            fhConfig.history.forEach((ele) => fh.updateHistory(ele));
+            console.log({fh});
+            
+            return fh;
+        }
+        let fh = new FileHistory(10);
+        console.log({fh});
+        
+        await writeFromObject(PATHS.SETTINGS.FILE_HISTORY, fh);
+        return fh;
+    })();
 
 
     // dummy for testing - add files to history manually
     const pathPA = "/home/andre/development/rpg_ideas/pathfinder/editions/01_First_Edition/personalityArchetype.catalog.json";
     const pathpCC = "/home/andre/development/rpg_ideas/pathfinder/editions/01_First_Edition/playerCharacterClasses.catalog.json";
-    fh.updateHistory(pathPA, () => {writeFromObject(PATHS.CONFIG.FILE_HISTORY, fh)});
-    fh.updateHistory(pathpCC, () => {writeFromObject(PATHS.CONFIG.FILE_HISTORY, fh)});
+    //fh.updateHistory(pathPA, () => {writeFromObject(PATHS.CONFIG.FILE_HISTORY, fh)});
+    //fh.updateHistory(pathpCC, () => {writeFromObject(PATHS.CONFIG.FILE_HISTORY, fh)});
 
 
-    // prompt for schema path, or select recent from numbered list
+    console.log("FILEHISTORY:", fileHistory);
+    
+    // prompt for schema path, or select from numbered list
     let promptMessage = "\nschema path, or select recent from numbered list";
     let separator = "-"
     promptMessage = `${separator.repeat(promptMessage.length)}\n${promptMessage}` 
-     fh.getHistory().forEach((ele, idx) => {
+     fileHistory.getHistory().forEach((ele, idx) => {
         promptMessage = `${idx}: ${ele}\n${promptMessage}` 
     });
 
     const promptLabel = "path"
-    const promptResponse = await promptInput(promptMessage, promptLabel, (response) => {
-        let filePathChosen = (() => {
-            const integerResponse = parseInt(response[promptLabel])
-            if (isNaN(integerResponse)) {
-                return response[promptLabel];
-            }
-            return fh.getHistory(integerResponse);
-        })();
-
-
-        fh.updateHistory(filePathChosen); 
-        return {response: response[promptLabel], filePathChosen};
-    });
+    const promptResponse = await promptInput(promptMessage, promptLabel, promptParse);
     console.log(promptResponse);
-    console.log(fh.getHistory());
+    console.log(fileHistory.getHistory());
     
     
     process.exit();
 })();
 
+async function promptParse(response) {
+    let filePathChosen = (() => {
+        const integerResponse = parseInt(response[promptLabel])
+        if (isNaN(integerResponse)) {
+            return response[promptLabel];
+        }
+        return fileHistory.getHistory(integerResponse);
+    })();
 
+    let loadedCatalog = await loadJSONConfigFile(filePathChosen,() => {return undefined;})
+
+    if(loadedCatalog !== undefined){
+        await fileHistory.updateHistory(filePathChosen, async () => {
+            console.log(fileHistory);
+            await writeFromObject(PATHS.SETTINGS.FILE_HISTORY, fileHistory)});
+    }
+    return {response: response[promptLabel], filePathChosen};
+}
 
 
 
