@@ -2,7 +2,7 @@
 "use strict";
 
 
-const = require("fs");
+const fs = require("fs");
 var Ajv = require('ajv');
 const util = require('util');
 const prompt = require('prompt');
@@ -10,6 +10,7 @@ const FileHistory = require('./customUtils/FileHistory.js');
 const { loadJSONFile } = require("./customUtils/loadJSONFile");
 const { writeFromSchema } = require("./customUtils/Schema/writeFromSchema");
 const { writeFromObject } = require("./customUtils/writeFromObject");
+const { promptInput } = require("./customUtils/promptInput");
 
 
 
@@ -76,18 +77,6 @@ async function promptForTerm() {
     });
     prompt.stop
   }
-
-async function promptInput(message, label, parser) {
-    const promisedGet = util.promisify(prompt.get)
-    
-    prompt.start();
-    prompt.message = `${message}\n`;
-    let response = await promisedGet(label); 
-    if  (parser) 
-        response = parser(response);
-    prompt.stop
-    return response; 
-};
 
 //these can go async later to process both file reads at once
 (async () => {

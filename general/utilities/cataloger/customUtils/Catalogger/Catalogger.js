@@ -11,6 +11,11 @@ const { writeFromObject } = require("../writeFromObject");
 const FileHistory = require('../FileHistory.js');
 const { loadJSONFile } = require("../loadJSONFile");
 const { writeFromSchema } = require("../Schema/writeFromSchema");
+const util = require('util');
+const { promptInput } = require("../promptInput");
+const Catalog = require('./Catalog.js');
+const fs = require("fs");
+
 
 const rootCatalogFileDescription = {
     title: "Root Catalog",
@@ -18,6 +23,66 @@ const rootCatalogFileDescription = {
     path: PATHS.CATALOGS.ROOT
 
 };
+
+async function promptforPath(fileHistory) {
+    console.log("FILEHISTORY:",  fileHistory);
+    
+    // prompt for schema path, or select from numbered list
+    let promptMessage = "\nschema path, or select recent from numbered list";
+    let separator = "-"
+    promptMessage = `${separator.repeat(promptMessage.length)}\n${promptMessage}` 
+    fileHistory.getHistory().forEach((ele, idx) => {
+        promptMessage = `${idx}: ${ele}\n${promptMessage}` 
+    });
+
+    const promptLabel = "path"
+    const promptResponse = await promptInput(promptMessage, promptLabel, validatePath);
+
+    if(promptResponse === "") {
+        //TODO open root catalog when there's an empty input
+        return;
+    }
+
+    if(promptResponse.error !== undefined) {
+        //TODO replace throw with display message and prompt for reprompting y/n
+        throw promptResponse.error;
+    }
+
+    
+    console.log(promptResponse);
+    return promptResponse.filePathChosen;
+
+}
+
+async function validatePath({path}) {
+
+    //TODO if path is undefined it's invalid
+    if(path === undefined) {
+        return {path, error: "Empty Path string"};
+    }
+
+    //TODO if path doesn't exist it's invalid
+    const promisedAccess = util.promisify(fs.access)
+
+    return path;
+    let filePathChosen = (() => {
+        const integerResponse = parseInt(response[promptLabel])
+        if (isNaN(integerResponse)) {
+            return response[promptLabel];
+        }
+        return fileHistory.getHistory(integerResponse);
+    })();
+
+    let loadedCatalog = await loadJSONFile(filePathChosen,() => {return undefined;})
+
+    if(loadedCatalog !== undefined){
+        await fileHistory.updateHistory(filePathChosen, async () => {
+            console.log(fileHistory);
+            await writeFromObject(PATHS.SETTINGS.FILE_HISTORY, fileHistory)});
+    }
+    return {response: response[promptLabel], filePathChosen};
+}
+
 //console.log([{loadJSONFile}, {writeFromSchema}]);
 
 
@@ -25,6 +90,7 @@ const Catalogger = class {
     constructor() {
         this.catalogSchema = undefined;
         this.rootCatalog = undefined;
+        this.fileHistory = undefined;
     }
     
     static init() {
@@ -73,7 +139,7 @@ const Catalogger = class {
         console.log({fileHistoryRAW});
         //const fileHistory
 
-        const fileHistory = await (async () => {
+        this.fileHistory = await (async () => {
             if (fileHistoryRAW !== undefined) {
                 const {maxHistorySize, history} = fileHistoryRAW;
                 let fh = new FileHistory(fileHistoryRAW);
@@ -89,5 +155,14 @@ const Catalogger = class {
             return fh;
         })();
     }
+
+    async openCatalog(options) {
+        return await (async () => {
+            const path = (options !== undefined && options.path !== undefined) ? options.path : await promptforPath(this.fileHistory);
+
+            return Catalog.init(path);
+        })();
+    }
+
 }; 
 module.exports = Catalogger;

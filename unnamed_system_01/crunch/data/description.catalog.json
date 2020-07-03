@@ -1,7 +1,7 @@
 {
     "id": 1,
     "name": "Drive",
-    "type":"concept", 
+    "type":"catalog", 
     "short": "The forces that drive.",
     "long": "",
     "full": ""
