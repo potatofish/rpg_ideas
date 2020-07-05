@@ -1,3 +1,6 @@
+/*jshint node: true, esversion: 9*/
+"use strict";
+
 const Schema = require('Schema');
 const Intake = require('Intake');
 const fs = require('fs');
@@ -16,6 +19,9 @@ const fs = require('fs');
 
     const testIntake = new Intake();
     console.log(testIntake);
+
+    console.log(Intake.intake("csv", ["path"], (res) =>{return res;}));
+
     
     
 })();
