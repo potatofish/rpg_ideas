@@ -18,9 +18,10 @@ const fs = require('fs');
     console.log(testSchema.objectFromSchema());
 
     const testIntake = new Intake();
-    console.log(testIntake);
+    console.log("%s", Intake);
 
-    console.log(Intake.intake("csv", ["path"], (res) =>{return res;}));
+    const csvDataPath = "./data/personalityArchetype.catalog.csv";
+    console.log(Intake.intake(Intake.FORMAT_CSV, [csvDataPath], (res) =>{return res;}));
 
     
     

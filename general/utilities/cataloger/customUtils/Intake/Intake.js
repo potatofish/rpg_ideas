@@ -1,11 +1,17 @@
 /*jshint node: true, esversion: 9*/
 "use strict";
 const csv = {parse: require("csv-parse")};
+const fs = require('fs');
+
+const FORMAT_CSV = "csv";
+
 
 module.exports = class Intake {
     constructor() {
 
     }
+    static get FORMAT_CSV() {return FORMAT_CSV;}
+
 
     static init(options) {
         return(async () => {
@@ -21,7 +27,7 @@ module.exports = class Intake {
 
     static intake(format, options, processor) {
         let intake = "";
-        console.log({options});
+        console.log({format, options, processor});
     
         
         switch (format) {
@@ -32,8 +38,8 @@ module.exports = class Intake {
                     format : options[1] !== undefined ? options[1] : "utf-8"
                 };
                 console.log(sourceFile);
-                
-                break;
+                const sourceCSV = fs.readFileSync(sourceFile.path, sourceFile.format);
+                return processor(sourceCSV);
             
             //TODO intake from variable (for argsv use)
             case "string":
@@ -50,6 +56,7 @@ module.exports = class Intake {
 
 
 
-        return processor(intake);
+         throw(intake);
     }
 };
+
