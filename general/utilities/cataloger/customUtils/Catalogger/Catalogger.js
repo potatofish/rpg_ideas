@@ -1,3 +1,7 @@
+/*jshint node: true, esversion: 9*/
+"use strict";
+
+
 const PATHS = { 
     SCHEMAS: { CATALOG: "./config/catalog.schema.json" }, 
 
@@ -29,13 +33,13 @@ async function promptforPath(fileHistory) {
     
     // prompt for schema path, or select from numbered list
     let promptMessage = "\nschema path, or select recent from numbered list";
-    let separator = "-"
-    promptMessage = `${separator.repeat(promptMessage.length)}\n${promptMessage}` 
+    let separator = "-";
+    promptMessage = `${separator.repeat(promptMessage.length)}\n${promptMessage}`;
     fileHistory.getHistory().forEach((ele, idx) => {
         promptMessage = `${idx}: ${ele}\n${promptMessage}` 
     });
 
-    const promptLabel = "path"
+    const promptLabel = "path";
     const promptResponse = await promptInput(promptMessage, promptLabel, validatePath);
 
     if(promptResponse === "") {

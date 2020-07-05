@@ -1,4 +1,4 @@
-//*jshint node: true, esversion: 9*/
+/*jshint node: true, esversion: 9*/
 "use strict";
 
 const Catalog = class {
