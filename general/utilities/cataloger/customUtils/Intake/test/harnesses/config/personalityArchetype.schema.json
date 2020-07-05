@@ -1,0 +1,21 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "~/",
+    "title": "personalityArchetypes",
+    "description": "A personality archetype as described by GMG",
+    "type": "object",
+    "properties": {
+        "title": {
+            "description": "Descriptive title of the personality archetype",
+            "type": "string"
+        },
+        "want": {
+            "description": "Description of what personality archetype's wants/goals in playing RPGs are",
+            "type": "string"     
+        },
+        "Reference": {
+            "description": "Referenced page in Source Material (Gamemastery Guide, 3rd Printing)",
+            "type": "number"
+        }
+    }
+}

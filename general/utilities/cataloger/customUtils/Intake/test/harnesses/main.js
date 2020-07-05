@@ -1,12 +1,11 @@
 const Schema = require('Schema');
+const Intake = require('Intake');
 const fs = require('fs');
 
 (async () => {
     console.log(require.main.path);
     
-
-    //TODO test $ref
-    const schemaPath = "./config/catalog.schema.json";
+    const schemaPath = "./config/personalityArchetype.schema.json";
     const schema = JSON.parse(fs.readFileSync(schemaPath, 'utf-8'));
     console.log({schema});
     
@@ -14,6 +13,10 @@ const fs = require('fs');
 
     //const schema = await testSchema.openCatalog();
     console.log(testSchema.objectFromSchema());
+
+    const testIntake = new Intake();
+    console.log(testIntake);
+    
     
 })();
 
