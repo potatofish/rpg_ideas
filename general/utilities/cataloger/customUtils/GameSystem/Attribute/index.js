@@ -1,5 +1,10 @@
+
+//*jshint node: true, esversion: 9*/
+"use strict";
+
+
 //TODO define Attribute as below
-/*
+/**
 Attribute 
     -> name => str
     -> value => int
@@ -28,4 +33,13 @@ in
 
     System.attributes[i].modifiers = ???
     */
+
+const Attribute  = class {
+    constructor(name, value) {
+        this.name = name;
+        this.value = value !== undefined ? value : 0 ;
+    }
+}
+
+module.exports = Attribute;
 

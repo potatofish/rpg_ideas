@@ -3,14 +3,14 @@
 const csv = {parse: require("csv-parse")};
 const fs = require('fs');
 
-const FORMAT_CSV = "csv";
+const FORMATS = {CSV : "csv"};
 
 
 module.exports = class Intake {
     constructor() {
 
     }
-    static get FORMAT_CSV() {return FORMAT_CSV;}
+    static get FORMATS() {return FORMATS;}
 
 
     static init(options) {

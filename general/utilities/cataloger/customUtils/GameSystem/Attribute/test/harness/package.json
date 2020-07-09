@@ -1,5 +1,5 @@
 {
-  "name": "cataloger",
+  "name": "harness",
   "version": "1.0.0",
   "description": "",
   "main": "main.js",
@@ -10,8 +10,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "ajv": "^6.12.3",
-    "mathjs": "^7.0.2",
-    "prompt": "^1.0.0"
+    "Attribute": "file:../.."
   }
 }
