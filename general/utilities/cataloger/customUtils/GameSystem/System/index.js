@@ -1,29 +1,32 @@
-let VALID_OPTION_KEYS = []
+let VALID_OPTION_KEYS = ["name", "session"];
+
 const Session = require('Session');
 
 class System {
-    constructor(options) {
+    constructor(systemConfig) {
 
-        console.log({options});
+        console.log([{systemConfig}, typeof session]);
         
-        if (options && typeof options !== Object) { 
+        if (systemConfig && typeof systemConfig !== "object") { 
             const nameKey = "name"
             const nameObject = {}
-            nameObject[nameKey] = options;
+            nameObject[nameKey] = systemConfig;
             VALID_OPTION_KEYS.push(nameKey);
-            options = options ? nameObject : {};
+            systemConfig = systemConfig ? nameObject : {};
         }
-        console.log({options});
+        console.log({systemConfig});
 
 
-        const optionsInvoked = options ? Object.keys(options): [];
+        const optionsInvoked = systemConfig ? Object.keys(systemConfig): [];
 
         console.log({optionsInvoked});
 
         optionsInvoked.forEach((key) => {
+            console.log({key});
+            
             if(!VALID_OPTION_KEYS.includes(key))
                 throw "invalid options";
-            this[key] = options[key];
+            this[key] = systemConfig[key];
         })
     }
 
@@ -39,11 +42,12 @@ class System {
         console.log(VALID_OPTION_KEYS);
         let sys = new System();
         return sys;
-        
     }
 
     createSession() {
-        let session = new Session();
+        console.log({result: this.session.flow});
+        
+        let session = new Session(this.session.flow.phases);
         return session;
 
     }
