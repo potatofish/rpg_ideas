@@ -1,4 +1,4 @@
-let VALID_OPTION_KEYS = ["name", "session"];
+let VALID_OPTION_KEYS = ["name", "session", "characters"];
 
 const Session = require('Session');
 
@@ -45,9 +45,9 @@ class System {
     }
 
     createSession() {
-        console.log({result: this.session.flow});
+        //console.log({result: this.session});
         
-        let session = new Session(this.session.flow.phases);
+        let session = new Session(this.session);
         return session;
 
     }
