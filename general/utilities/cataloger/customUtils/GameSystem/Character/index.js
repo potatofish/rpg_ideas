@@ -1,5 +1,6 @@
 const Attribute = require("../Attribute/test/harness/node_modules/Attribute");
 
+
 const Character = class {
     constructor(name, attributes){
         this.name = name;

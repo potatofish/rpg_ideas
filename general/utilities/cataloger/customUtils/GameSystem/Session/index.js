@@ -1,6 +1,9 @@
+const Table = require("../Table");
+const Character = require("../Character");
+
 function validateConstrutorOptions(options) {
-    if(!options || !options.flow || !options.flow.phases) throw "bad";
-    console.log({Map: new Map([[!options, "bad"]])});
+    //if(!options || !options.flow || !options.flow.phases) throw "bad";
+    //console.log({Map: new Map([[!options, "bad"]])});
 
     const VALIDATION_OPTIONS = [
         [!options, ()=>{return "argument options is not defined";}],
@@ -19,22 +22,42 @@ function validateConstrutorOptions(options) {
     
 }
 
+// TODO encapsulate that characters are a function of a session, but can also be added to a session from external
 class Session {
     constructor(options) {
         validateConstrutorOptions(options)
         
-        this.phases = options.flow.phases;
-        this.characters = options.characters;
+        this.CONFIG = {};
+        this.CONFIG.phases = options.flow.phases;
+        this.CONFIG.characters = options.characters;
+        this.table = new Table(options.table)
         
     }
 
     get flow() {
         return {
             setup: {}, 
-            phases: this.phases, 
+            phases: this.CONFIG.phases, 
             shutdown: {}
         };
         
+    }
+
+    joinWithCharacter(aCharacter) {
+        this.characters.push(aCharacter);
+    }
+
+    joinWithPlayer(aPlayer) {
+        this.table.sit(aPlayer);
+
+    }
+
+    get characters(aPlayer) {
+        if (aPlayer === undefined)
+            console.log("return all characters");
+        if (aPlayer.characters === undefined)
+            console.log("create a new character from template");
+        return aPlayer.characters;
     }
 }
 

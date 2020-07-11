@@ -1,5 +1,5 @@
 {
-  "name": "{{pascalCase name}}TestHarness",
+  "name": "SessionTestHarness",
   "version": "1.0.0",
   "description": "",
   "main": "main.js",
@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "{{pascalCase name}}": "file:../.."
+    "Player": "file:../../../Player",
+    "Session": "file:../.."
   }
 }
