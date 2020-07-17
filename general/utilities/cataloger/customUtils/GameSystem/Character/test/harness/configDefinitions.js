@@ -8,6 +8,8 @@
 // #1 - Characters (config) is defined by System
 // -> A Character config inspired by Fiasco (a game System)
 //console.log("****Config****");
+console.log(this);
+
 const harness01_CHARACTER_CONFIG = {
     FIASCO: {
         name: "",
@@ -24,3 +26,4 @@ const harness01_CHARACTER_CONFIG = {
     }
 };
 exports.harness01_CHARACTER_CONFIG = harness01_CHARACTER_CONFIG;
+console.log(this);

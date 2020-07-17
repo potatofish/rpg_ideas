@@ -8,10 +8,11 @@ class Harness {
         //run configs against all harnesses
         Object.keys(this._configs).forEach((configKey) => {
             const config = this._configs[configKey];
-            this._tests.forEach((cb, idx) => {
-                console.log(`**** Running ${cb.name} for config: "${configKey}" ****`);
-                cb(config);
-                console.log(`**** Ending ${cb.name} for config: "${configKey}" ****`);
+            Object.keys(this._tests).forEach((cbKey) => {
+                const testCase = this._tests[cbKey]
+                console.log(`**** Running ${cbKey} for config: "${configKey}" ****`);
+                testCase(config);
+                console.log(`**** Ending ${cbKey} for config: "${configKey}" ****`);
             });
         });
     }

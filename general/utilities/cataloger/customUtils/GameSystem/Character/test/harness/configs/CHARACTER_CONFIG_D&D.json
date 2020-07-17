@@ -1,0 +1,14 @@
+{
+    "name": "Classic D&D Charaacter",
+    "template": "",
+    "attributes": [
+        "Strength",
+        "Dexterity",
+        "Constitution",
+        "Intelligence",
+        "Wisdom",
+        "Charisma"
+    ],
+    "validation": [],
+    "system": "D&D"
+}
