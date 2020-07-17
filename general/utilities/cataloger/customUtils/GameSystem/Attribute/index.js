@@ -37,7 +37,7 @@ in
 const Attribute  = class {
     constructor(name, value) {
         this.name = name;
-        this.value = value !== undefined ? value : 0 ;
+        this.value = value;
     }
 }
 

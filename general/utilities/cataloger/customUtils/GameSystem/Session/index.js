@@ -31,6 +31,7 @@ class Session {
         this.CONFIG.phases = options.flow.phases;
         this.CONFIG.characters = options.characters;
         this.table = new Table(options.table)
+        this.table.characters = [];
         
     }
 
@@ -44,20 +45,21 @@ class Session {
     }
 
     joinWithCharacter(aCharacter) {
-        this.characters.push(aCharacter);
+        this.table.characters.push(aCharacter);
     }
 
     joinWithPlayer(aPlayer) {
         this.table.sit(aPlayer);
-
+        const playerCharacter = Character.init(aPlayer);
+        this.table.characters.push(playerCharacter);
+        return playerCharacter;
     }
 
-    get characters(aPlayer) {
+    characters(aPlayer) {
+        console.log("characters");
         if (aPlayer === undefined)
-            console.log("return all characters");
-        if (aPlayer.characters === undefined)
-            console.log("create a new character from template");
-        return aPlayer.characters;
+            return this.table.characters;
+        return [];
     }
 }
 

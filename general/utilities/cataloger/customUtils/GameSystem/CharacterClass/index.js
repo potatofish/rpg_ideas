@@ -1,4 +1,6 @@
-class CharacterClass {
+const Attribute = require('./Attribute');
+
+class CharacterClass extends Attribute {
     constructor(config) {
         console.log("Hello World: CharacterClass", config);
 
