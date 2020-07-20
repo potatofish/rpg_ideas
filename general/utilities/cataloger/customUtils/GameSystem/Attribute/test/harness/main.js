@@ -1,13 +1,35 @@
-const Attribute = require('Attribute');
-const { Dice } = require("../../../Dice");
+//*jshint node: true, esversion: 9*/
+"use strict";
+const path = require("path");
+const fs = require("fs");
+const { Harness } = require("../../../../Harness");
 
-(async () => {
-    console.log(require.main.path);
-    console.log(new Attribute("Strength", Dice.roll(3, 6)));
-    let roll = Dice.eval("{white:4d6, black:4d6}");
-    console.log({roll});
-    
-})();
+//Read & parse all Test Harness Configs (JSON)
+const configsPath = path.join(__dirname, "configs");
+let testHarnessConfigs = {};
+const jsonExtName = ".json";
+fs.readdirSync(configsPath).forEach((file) => {
+    if(path.extname(file) === jsonExtName) {
+      const testConfigName = path.basename(file,jsonExtName)
+      const testConfigJSON = require(path.join(configsPath, file));
+      const testConfig = Object.fromEntries([[testConfigName, testConfigJSON]]);
+      Object.assign(testHarnessConfigs, testConfig)
+    }
+});
+console.log({testHarnessConfigs});
+
+// Require all Test Harness Cases
+let testHarnessCases = {};
+const casesPath = path.join(__dirname, "cases");
+fs.readdirSync(casesPath).forEach((file) => {
+  const testCase = require(path.join(casesPath, file));
+  Object.assign(testHarnessCases,testCase)
+});
+console.log({testHarnessCases});
+
+// Run all parsed configs against all required cases
+(new Harness(testHarnessConfigs, testHarnessCases)).run();
+
 
 
 

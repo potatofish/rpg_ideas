@@ -1,4 +1,3 @@
-
 const path = require("path");
 const fs = require("fs");
 const { Harness } = require("../../../../Harness");
@@ -10,8 +9,10 @@ const jsonExtName = ".json";
 const utf8Encoding = "utf-8";
 fs.readdirSync(configsPath).forEach((file) => {
     if(path.extname(file) === jsonExtName) {
-        const jsonPlainText = fs.readFileSync(path.join(configsPath, file),utf8Encoding);
-        testHarnessConfigs[path.basename(file,jsonExtName)] = JSON.parse(jsonPlainText)
+      const testConfigName = path.basename(file,jsonExtName)
+      const testConfigJSON = require(path.join(configsPath, file));
+      const testConfig = Object.fromEntries([[testConfigName, testConfigJSON]]);
+      Object.assign(testHarnessConfigs, testConfig)
     }
 });
 console.log({testHarnessConfigs});
@@ -25,7 +26,7 @@ fs.readdirSync(casesPath).forEach((file) => {
 });
 console.log({testHarnessCases});
 
-// Run all configs against all cases
+// Run all parsed configs against all required cases
 (new Harness(testHarnessConfigs, testHarnessCases)).run();
 
 

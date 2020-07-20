@@ -1,0 +1,13 @@
+{
+    "label": "Ability Score",
+    "value": 0,
+    "validation": {
+      "checks": [
+        "value >= validation.min",
+        "value <= validation.max"
+      ],
+      "min": 3,
+      "max": 18
+    },
+    "system": "D&D"
+  }

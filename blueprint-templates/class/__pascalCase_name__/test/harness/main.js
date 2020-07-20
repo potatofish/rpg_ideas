@@ -1,13 +1,35 @@
 //*jshint node: true, esversion: 9*/
 "use strict";
+const path = require("path");
+const fs = require("fs");
+const { Harness } = require("../../../../Harness");
 
-const {{pascalCase name}} = require('{{name}}');
+//Read & parse all Test Harness Configs (JSON)
+const configsPath = path.join(__dirname, "configs");
+let testHarnessConfigs = {};
+const jsonExtName = ".json";
+fs.readdirSync(configsPath).forEach((file) => {
+    if(path.extname(file) === jsonExtName) {
+      const testConfigName = path.basename(file,jsonExtName)
+      const testConfigJSON = require(path.join(configsPath, file));
+      const testConfig = Object.fromEntries([[testConfigName, testConfigJSON]]);
+      Object.assign(testHarnessConfigs, testConfig)
+    }
+});
+console.log({testHarnessConfigs});
 
-const {{camelCase name}}Config = {};
+// Require all Test Harness Cases
+let testHarnessCases = {};
+const casesPath = path.join(__dirname, "cases");
+fs.readdirSync(casesPath).forEach((file) => {
+  const testCase = require(path.join(casesPath, file));
+  Object.assign(testHarnessCases,testCase)
+});
+console.log({testHarnessCases});
+
+// Run all parsed configs against all required cases
+(new Harness(testHarnessConfigs, testHarnessCases)).run();
 
 
-async function harness(config) {
-    let {{camelCase name}} = new {{pascalCase name}}(config);
-};
 
-harness({{camelCase name}}Config);
+
