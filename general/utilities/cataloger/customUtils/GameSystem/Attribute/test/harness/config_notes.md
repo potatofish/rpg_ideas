@@ -45,14 +45,13 @@
 ### Survival Chance 
 + value = Ability Scores[Constitution].survival
 
-### ChainMail Fighting Capability
-+ value = CharacterClass.cmFighting(Experience.Level)
-
 ### Fire Missle 
 + value = base + Ability Scores[Dexterity].fireMissile
 
 
-### Magic Resistance
+### Magic 
++ resistance = 
++ spellsPerSpellLevel = CharacterClass.spellsPerSpellLevel(Experience.Level)
 
 ### Biography
 + Name = Player.pick
@@ -69,6 +68,8 @@
 + encumberanceWeight += SUM(inventory[*].weight) + gold
 
 ### Fight
++ chainmailFightingCapability = CharacterClass.cmFightingCapability(Experience.Level)
++ thac
 
 ### Prime Requisite
 + _experienceRequisite = max(Math.round(Ability Scores[_Ability_] * class.requisites.forEach(_Ability_: rate)))
