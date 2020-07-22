@@ -98,9 +98,7 @@ Session.Setting.missleRange = function (characterA, characterB) {
 
 Session.Setting.attack = function(attacker, defender) {
     var attackDieSides = 20
-
-    var a=
-
+    
     var {attackerTable, attackerTier} 
         = attacker.isMen 
         ? { "menAttackingMen", attacker.attackTier }
