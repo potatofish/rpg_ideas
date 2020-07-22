@@ -17,17 +17,17 @@ System.table["menAtackingMen"] = {
 | 7  | 12 | 10 | 07 | 05 | 03 | 01 |
 | 8  | 11 | 09 | 06 | 04 | 02 | 01 |
 | 9  | 10 | 08 | 05 | 03 | 01 | 01 |
+</td></tr></table>
 
 ```javascript
 }
 ```
 
-
 * Fighting-Men advance in tiers grouped by level/3
 * Magic-Users advance in tiers grouped by level/5
 * Clerics advance in tiers by level/4 
 * Normal men equal 1st level fighters.
-</td></tr></table>
+
 
 ```javascript
 System.classes = 
