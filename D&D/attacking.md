@@ -31,7 +31,15 @@ System.table["menAtackingMen"] = {
 
 ```javascript
 System.classes = 
-    new CharacterClass(["Fighting-Men","Magic-Users", "Clerics"]).attackTier = [3, 5, 4]
+    new CharacterClass(["Fighting-Men","Magic-Users", "Clerics"])
+        .attackTierInterval = [3, 5, 4]
+
+Character.attackTier = function() {
+    var tier = this.CharacterClass 
+        ? round(this.level/this.CharacterClass.attackTierInterval)
+        : 1
+    return tier
+}
 
 System.table["monstersAtackingMen"] = {
 ```
@@ -77,7 +85,7 @@ System.table["rangeBonus"] = {
 }
 
 Session.Setting.missleRange = function (characterA, characterB) {
-    var rangeOptions = [ "long",  "medium", "short"]
+    var rangeOptions = System.table["rangeBonus"].keys
     var distance = 
         Session.Setting.location(characterA) - 
         Session.Setting.location(characterB)
@@ -91,9 +99,11 @@ Session.Setting.missleRange = function (characterA, characterB) {
 Session.Setting.attack = function(attacker, defender) {
     var attackDieSides = 20
 
+    var a=
+
     var {attackerTable, attackerTier} 
         = attacker.isMen 
-        ? { "menAttackingMen", attacker.CharacterClass.attackTier }
+        ? { "menAttackingMen", attacker.attackTier }
         : { "monstersAtackingMen", attacker.Dice }
     
 
@@ -102,7 +112,7 @@ Session.Setting.attack = function(attacker, defender) {
         defender.armorClass
     )
  
-    if(attacker.attack.isMissile) {}
+    if(attacker.weaponEquiped.isMissile) {}
         attackRollToHitTarget -= System.lookup(
             "rangeBonus", 
             Session.Setting.missleRange(attacker, defender)
