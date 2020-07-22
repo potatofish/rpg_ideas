@@ -1,0 +1,49 @@
+```javascript
+//lookup a system table
+System.lookup = function(table, element) {
+    return this.tables[table][element]
+}
+
+System.table["LevelsByClass"] = {
+    "Fighting-Men":
+```
+> | Level   | Total |  Sum        | Power          |
+> |:-------:|-------|----------------|----------------|
+> | 1       |  2000 | ?           | 2^1 * 1000     |
+> | 2       |  4000 | 2000 + 2000 | 2^2 * 1000     |
+> | 3       |  8000 | 4000 + 4000 | 2^3 * 1000     |
+> | _level_ |  -    |     -       | 2^_level_*1000 | 
+
+
+```javascript
+    "Magic-Users":
+```
+> | Level   | Total  |  Sum        | Power          |
+> |:-------:|--------|-------------|----------------|
+> | 1       |  2500  | ?           | 2^1 * 1250     |
+> | 2       |  5000  | 2500 + 2500 | 2^2 * 1250     |
+> | 3       |  10000 | 5000 + 5000 | 2^3 * 1250     |
+> | 4       |  20000 | 10000 * 2   | 2^4 * 1250     |
+> | 5       |  35000 |             | (2^5 * 1250 ) - 5000  or 2^4 *1250 |
+> | 6       |  50000 |             | (2^6 * 1250) - 30000 or 2^4 + 2^3|
+> | 7 
+> | _level_ |  -     |     -       | __nightmares__ |
+
+```javascript
+    "Clerics":
+```
+> | Level   | Total  |  Sum        | Power          |
+> |:-------:|--------|-------------|----------------|
+> | 1       |  1500  | ?           | 2^1 * 750     |
+> | 2       |  3000  | 1500 + 1500 | 2^2 * 750     |
+> | 3       |  6000  | 5000 + 5000 | 2^3 * 750     |
+> | _level_ |  -     |     -       | ???? |
+
+```javascript
+}
+
+Session.level = function(characterClass, experience)) {
+    var levelingChart = System.lookup("LevelsByClass", characterClass);
+    var level = levelingChart(experience)
+}
+```
