@@ -1,3 +1,9 @@
+### ALTERNATIVE COMBAT SYSTEM:
+This system is based upon the defensive and offensive capabilities of the combatants being plotted into two matrixes. 
+
+There are two charts, one for men versus men or monsters and one for monsters (including kobolds, goblins, orcs, etc.) versus men.
+
+
 ```javascript
 System.table["menAtackingMen"] = {
 ```
@@ -23,11 +29,11 @@ System.table["menAtackingMen"] = {
 }
 ```
 
+For men versus men, the tier of an attacker is determined by thier level and the rate at which thier class advances tiers.
 * Fighting-Men advance in tiers grouped by level/3
 * Magic-Users advance in tiers grouped by level/5
 * Clerics advance in tiers by level/4 
 * Normal men equal 1st level fighters.
-
 
 ```javascript
 System.classes = 
@@ -39,12 +45,15 @@ Character.attackTier = function() {
         ? round(this.level/this.CharacterClass.attackTierInterval)
         : 1
     return tier
-}
 
+}
+```
+<h2>Matrix II: Monsters Attacking Men</h2>
+
+```javascript
 System.table["monstersAtackingMen"] = {
 ```
 <table><tr><td></td><td></td><td></td><td>
-<b>Matrix II: Monsters Attacking Men</b></br>
 <sub>1d20 to Hit by Monster's Dice# vs target's AC</sub>
 </td></tr>
 <tr><td colspan=4>
@@ -62,10 +71,11 @@ System.table["monstersAtackingMen"] = {
 
 </td></tr></table>
 
+```javascript
+}
+```
+
 All base scores to hit will be modified by magic armor and weaponry. 
-
-Missile hits will be scored by using the above tables at long range and decreasing Armor Class by 1 at medium and 2 at short range.
-
 
 ```javascript
 Character.equipBonus = function (attribute) {
@@ -79,7 +89,9 @@ Character.armorClass = function() {
     var armorClass = 9
     return armorClass - Character.equipbonus("armorClass")
 }
-
+```
+Missile hits will be scored by using the above tables at long range and decreasing Armor Class by 1 at medium and 2 at short range.
+```javascript
 System.table["rangeBonus"] = {
     long: 0, medium: 1, short: 2 
 }
@@ -95,10 +107,13 @@ Session.Setting.missleRange = function (characterA, characterB) {
         
     return refereeCall
 }
+```
 
+All attacks which score hits do 1-6 points damage unless otherwise noted.
+```javascript
 Session.Setting.attack = function(attacker, defender) {
     var attackDieSides = 20
-    
+
     var {attackerTable, attackerTier} 
         = attacker.isMen 
         ? { "menAttackingMen", attacker.attackTier }
@@ -119,7 +134,14 @@ Session.Setting.attack = function(attacker, defender) {
 
     var attackRoll = Dice.roll(`1d${attackDieSides}`)
     var isHit = (attackRoll >= attackRollToHitTarget)
-    return isHit
+    var damage = isHit 
+        ? Dice.roll(
+            attacker.weaponEquiped 
+                ? attacker.weaponEquiped.Damage 
+                : "1d6"
+            )
+        : 0
+    return {attackRoll, isHit, damage}
 }
 // 
 ```
