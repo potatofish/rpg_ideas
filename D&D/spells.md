@@ -1,11 +1,17 @@
 ```javascript
 System.matrix["spells"] = [
-    new Spell({name: String, effect: Effect, target: String})
+    new Spell({name: String, effect: Effect})
     ...
 ]
 
 System.matrix["CharacterClasses"] = [
-    new CharacterClass(name: String, spellList: Spell[][]) }
+    new CharacterClass(
+        name: String,
+        byLevelCharts: {
+            spellList: Spell[],
+            moves: Function[]
+        }[]
+    ),
     ...
 ]
 
@@ -18,44 +24,99 @@ var spellExplanations = parse(
 
 spellExplanations.forEach((explanation: {spell, class, level}) => {
     System.matrix["spells"].push(spell)
-    System.matrix["CharacterClasses"][class].spellList[level].push(spell)
+    System.matrix["CharacterClasses"][class].byLevelCharts[level].spellList.push(spell)
 })
-
 ```
 
 ### MAGICAL RESEARCH:
 Both Magic-Users and Clerics may attempt to expand on the spells listed (as applicable by class). 
 ```javascript
 static researchMagic = function (Spell)  {...}
-// Only Magic-Users & Clerics have spellLists
 
+// Only Magic-Users & Clerics have spellLists, so give them a level-0
+// ability to research magic
 System.matrix["CharacterClasses"].forEach((class) => {
-    if class.hasProperty("spellList")
-        class.addProperty(researchMagic)
+    if class.byLevelCharts.hasProperty("spellList")
+        class.byLevelCharts.moves[0].addProperty(researchMagic)
 })
-
-reasearchMagic = function (Spell) { 
-    var spellLevel =    
 ```
 
 The level of the magic required to operate the spell (determination by referee) dictates the initial investment. 
+
+```javascript
+reasearchMagic = function (investmentTier === /[1-5]/, spellName, effect) { 
+    var researcher = this
+    var spellLevel = Player["Referee"].decision(effect)
+```
 
 Investment for 1st level is 2,000 Gold Pieces, 2nd level is 4,000 Gold
 Pieces, 3rd level is 8,000 Gold Pieces, 4th level is 16,000 Gold Pieces, 5th level is 32,000 Gold Pieces, and 6th level is 64,000 Gold Pieces. 
 
 The time required is one week per spell level. For every amount equal to the basic investment spent there is a 20% chance of success, cumulative. 
 ```javascript
-var spellInvestment = function (spellLevel) {
-    return {
-        gold: 2^spellLevel *1000,
-        time: Time.inSeconds("1 Week")
+    var spellInvestment = {
+        gold: 2^spellLevel*1000,
+        time: Time.inSeconds("1 Week")*spellLevel
         chanceOfSuccess: 20%
     }
+
+    if researcher.gold < (spellInvestment.gold * investmentTier)
+        throw notEnoughGoldError
+    
+    if researcher.SpellBook().level(spellLevel) === undefined
+        throw cantCastSpellError
+
+    researcher.gold -= (spellInvestment.gold * investmentTier)
+    researcher.occupied((spellInvestment.time * investmentTier))
+    
+    const rollForSuccess = Dice.roll(1,100)
+
+    const spellResearched = (
+        rollForSuccess 
+           <= (spellInvestment.chanceOfSuccess * investmentTier)
+    )
+
+    if spellResearched {
+        researcher.Spellbook().level(spellLevel) 
+            += new Spell(spellName, effect)
+    }
+
+    return {
+        cost: {
+            investmentTier *
+            {{gold, time, chanceOfSuccess} : spellInvestment}
+        },
+        result: {
+            rollForSuccess, 
+            spellResearched
+        }
+    }
+
+} 
+
+
+const characterConfig = {
+    name: String, 
+    class: CharacterClass.hasProperty("spellList"), 
+    moves: []
+    ...
 }
 
+static Character.init = function(config) {
+    var aNewCharacter = new Character(characterConfig)
+    this.moves += this.class.byLevelCharts.moves[<=1]
+}
+
+// when leveling occurs characters gain new moves
+Session.level = function(character) {
+    character.level++
+    character.moves += character.class.byLevelCharts[level].moves
+}
+
+var SpellCasterBob = Character.init(characterConfig)
+SpellCasterBob.moves.researchMagic()
 
 ```
-
 
 An investment of 10,000 Gold Pieces in order to develop new 1st level spell, for example, has a 100% chance of success after one game week.
 
