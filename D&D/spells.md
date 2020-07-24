@@ -16,6 +16,8 @@ System.matrix["CharacterClasses"] = [
     ...
 ]
 
+// TODO add spelllevel advancement matrix, 
+
 var pdfPath = String // a path to a pdf of Men & Magic
 
 var spellExplanations = parse(
@@ -56,7 +58,7 @@ The time required is one week per spell level. For every amount equal to the bas
 ```
 The level of the spell researched must be consistent with the level of the MagicUser or Cleric involved, i.e. the character must be able to use spells equal to or above the level of the one he desires to create.
 ```javascript
-    if researcher.SpellBook().level(spellLevel) === undefined
+    if researcher.inventory.SpellBook[spellLevel] === undefined
         throw cantCastSpellError
 
     researcher.gold -= (spellInvestment.gold * investmentTier)
@@ -72,7 +74,7 @@ The level of the spell researched must be consistent with the level of the Magic
 Once a new spell is created the researcher may include it in the list appropriate to its level. He may inform others of it, thus enabling them to utilize it, or he may keep it to himself.
 ```javascript
     if spellResearched {
-        researcher.Spellbook().level(spellLevel) 
+        researcher.inventory.SpellBook[level]
             += new Spell(spellName, effect)
     }
 
@@ -119,6 +121,7 @@ static Character.init = function(config) {
 // when leveling occurs characters gain new moves, 
 // but this doesn't matter for spells
 // TODO add gaining  new spells here
+// TODO add gaining new spellbooks here
 Session.level = function(character) {
     character.level++
     character.moves += character.class.byLevelCharts[level].moves
@@ -159,6 +162,25 @@ SpellCasterFoo.moves.castSpell("Generic Level 1 Spell")
 ### <center>BOOKS OF SPELLS</center>
 ---
 Characters who employ spells are assumed to acquire books containing the
-spells they can use, one book for each level. If a duplicate set of such books is desired, the cost will be the same as the initial investment for research as listed
-above, i.e. 2,000, 4,000, 8,000, etc. Loss of these books will require replacement
-at the above expense.
+spells they can use, one book for each level. 
+```javascript
+Item interface () {
+    this.replacementValue = 0
+}
+
+SpellBook class implements Item (level, Spells[]) {
+    this._level = level
+    this._spells = Spells
+
+    get level { return this._level }
+
+```
+If a duplicate set of such books is desired, the cost will be the same as the initial investment for research as listed above, i.e. 2,000, 4,000, 8,000, etc. Loss of these books will require replacement at the above expense.
+
+```javascript
+    get replacementValue {
+        //TODO take the multiplicant to a const
+        return this._spells.length * 2^spellLevel*1000
+    }
+}
+```
