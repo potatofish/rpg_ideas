@@ -94,5 +94,12 @@
 + {Maximum, Loyalty Base} = Ability Scores[Charisma]
 
 
+### Anti-Cleric
+Note: There are Anti-Clerics (listed below) who have similar powers to Clerics. 
 
+Those Clerical spells underlined on the table for Cleric Spells have a reverse effect, all others functioning as noted. The chief exception is the Raise Dead spell which becomes:
+
+The Finger of Death: Instead of raising the dead, this spell creates a "death ray" which will kill any creature unless a saving throw is made (where applicable). Range: 12". (A Cleric-type may use this spell in a life-or-death situation, but misuse will immediately turn him into an Anti-Cleric.) 
+
+Anti-Clerics: Evil Acolyte, Evil Adept, Shaman, Evil Priest, Evil Curate, Evil Bishop, Evil Lama, Evil High Priest.
 

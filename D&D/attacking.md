@@ -1,4 +1,5 @@
-### ALTERNATIVE COMBAT SYSTEM:
+### <center>ALTERNATIVE COMBAT SYSTEM</center>
+---
 This system is based upon the defensive and offensive capabilities of the combatants being plotted into two matrixes. 
 
 There are two charts, one for men versus men or monsters and one for monsters (including kobolds, goblins, orcs, etc.) versus men.
