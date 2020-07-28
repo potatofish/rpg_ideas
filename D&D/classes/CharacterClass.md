@@ -93,27 +93,30 @@ var progressionCharts = {
 
 </table>
 
-For each of these charts the following is true for any Class:
+
+let validationsByClass = []
+For each of these matrices the following is true for any Class:
 * The chart has rows with elements Level & Experience cost
 * The each Level is unique for all Classes in a System
 * The first Level of any Class has no Experience cost (0)
 * Each Level costs more Experience than the cost for the previous Level
 
+
 ```javascript
 require(./matrix.md)
-
-let validations = function((row) => {
-    return [
-        [ row.hasProperty("Level") && row.hasProperty("Experience"), invalidRowFormatError ],
-    ]
-} 
-
-Object.keys(progressionCharts).forEach((class) => {
-    new Matrix(progressionCharts[class], yes )
-})
+let classList = Object.Keys(progressionCharts)
 
 
-```
+System.matricies["progression"] = new Matrix([["characterClass", "progressionMatrix"]],true,validationsBySystem);
+
+classList.forEach((className) => {
+    let classMatrix = new Matrix(
+        progressionCharts[className], true, validationsByClass
+    )
+
+    System.matricies["progression"].addRow([className, classMatrix])
+}
+
 
 let System = class {
     constructor() {
